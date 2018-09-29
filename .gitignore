@@ -1,0 +1,8 @@
+data/
+logs/
+model/
+.idea/
+__pycache__/
+.*pid
+.DS_Store
+
