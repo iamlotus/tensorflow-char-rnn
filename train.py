@@ -102,10 +102,9 @@ def run_training():
 
                     validate_batch_id=global_step%data_provider.validate_batch_num
                     x_validate,y_validate=data_provider.validate_batch(validate_batch_id)
-                    validate_loss, _, _, validate_summary = sess.run([
+                    validate_loss, _, validate_summary = sess.run([
                         end_points['total_loss'],
                         end_points['last_state'],
-                        end_points['train_op'],
                         summary_op
                     ], feed_dict={input_data: x_validate, output_targets: y_validate})
 
