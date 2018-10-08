@@ -4,6 +4,7 @@ import time
 import pickle
 import rnn
 import numpy as np
+import math
 
 tf.app.flags.DEFINE_bool('treat_corpus_as_byte', True, 'treat corpus as byte or word, default(True) will treat input'
                                                        ' as byte stream, set to False will treat input as text(with '
@@ -90,6 +91,7 @@ def run_training():
         for epoch in range(start_epoch, FLAGS.epochs):
             for train_batch_id in range(data_provider.train_batch_num):
                 global_step = epoch * data_provider.train_batch_num + train_batch_id
+                progress=epoch+ (train_batch_id+1)/data_provider.train_batch_num
                 if global_step % FLAGS.print_every_steps==0:
                     x_train, y_train=data_provider.train_batch(train_batch_id)
 
@@ -108,8 +110,8 @@ def run_training():
 
                     train_writer.add_summary(train_summary,global_step=global_step)
                     validate_writer.add_summary(validate_summary, global_step=global_step)
-                    print('[%s] Global step: %d, Epoch: %d, Batch: %d, Train loss: %.8f, Validate loss: %.8f' %
-                          (time.strftime('%Y-%m-%d %H:%M:%S'),global_step,epoch, train_batch_id, train_loss,
+                    print('[%s] Global step: %d, Epoch: %.3f, Train loss: %.8f, Validate loss: %.8f' %
+                          (time.strftime('%Y-%m-%d %H:%M:%S'),global_step,progress, train_loss,
                            validate_loss), flush=True)
                 else:
                     x_train, y_train = data_provider.train_batch(train_batch_id)
