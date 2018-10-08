@@ -55,7 +55,7 @@ def run_compose():
         saver.restore(sess, checkpoint)
 
         while True:
-            i =input("## print any key to compose new sentence( Press 'E' to exit)")
+            i =input("## print any key to compose new sentence(Press 'E' to exit)")
             if i=='E' or i=='e':
                 break;
 
