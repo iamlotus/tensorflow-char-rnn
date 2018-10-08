@@ -106,13 +106,13 @@ def rnn_model(cell_type, input_data, output_data, vocab_size, rnn_size, num_laye
     end_points = {}
 
     if cell_type== 'rnn':
-        cell_fun=tf.nn.rnn_cell.BasicRNNCell
+        cell=tf.nn.rnn_cell.BasicRNNCell(num_units=rnn_size)
     elif cell_type == 'gru':
-        cell_fun=tf.nn.rnn_cell.GRUCell
+        cell = tf.nn.rnn_cell.GRUCell(num_units=rnn_size)
     elif cell_type == 'lstm':
-        cell_fun =tf.nn.rnn_cell.LSTMCell
+        cell= tf.nn.rnn_cell.LSTMCell(num_units=rnn_size,state_is_tuple=True)
 
-    cell = cell_fun(rnn_size, state_is_tuple=True)
+    # cascade
     cell = tf.nn.rnn_cell.MultiRNNCell([cell] * num_layers, state_is_tuple=True)
 
     if output_data is not None:
@@ -177,6 +177,7 @@ def corpus_summary(data_provider):
     x_validate_0, y_validate_0 = data_provider.validate_batch(0)
     print("## x_validate[0][0][:10]: %s" % x_validate_0[0][:10])
     print("## y_validate[0][0][:10]: %s" % y_validate_0[0][:10])
+
 
 def print_args(flags):
     print('=' * 100)

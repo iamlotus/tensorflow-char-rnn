@@ -93,18 +93,16 @@ def run_training():
                 if global_step % FLAGS.print_every_steps==0:
                     x_train, y_train=data_provider.train_batch(train_batch_id)
 
-                    train_loss, _, _,train_summary = sess.run([
+                    train_loss, _, train_summary = sess.run([
                         end_points['total_loss'],
-                        end_points['last_state'],
                         end_points['train_op'],
                         summary_op
                     ], feed_dict={input_data: x_train, output_targets: y_train})
 
-                    validate_batch_id=global_step%data_provider.validate_batch_num
+                    validate_batch_id = global_step%data_provider.validate_batch_num
                     x_validate,y_validate=data_provider.validate_batch(validate_batch_id)
-                    validate_loss, _, validate_summary = sess.run([
+                    validate_loss, validate_summary = sess.run([
                         end_points['total_loss'],
-                        end_points['last_state'],
                         summary_op
                     ], feed_dict={input_data: x_validate, output_targets: y_validate})
 
@@ -115,8 +113,7 @@ def run_training():
                            validate_loss), flush=True)
                 else:
                     x_train, y_train = data_provider.train_batch(train_batch_id)
-                    _, _ = sess.run([
-                        end_points['last_state'],
+                    _ = sess.run([
                         end_points['train_op']
                     ], feed_dict={input_data: x_train, output_targets: y_train})
                 global_step += 1
@@ -129,6 +126,7 @@ def main(_):
     os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.cuda_visible_devices  # set GPU visibility in multiple-GPU environment
     rnn.print_args(FLAGS)
     run_training()
+
 
 if __name__ == '__main__':
     tf.app.run()
